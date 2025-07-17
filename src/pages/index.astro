@@ -1,0 +1,44 @@
+---
+import Header from '../components/Header.astro';
+import Layout from '../layouts/Layout.astro';
+import Form from '../components/Form.astro';
+import FormPin from '../components/FormPin.astro';
+
+---
+
+<Layout>
+	<Header />
+	<Form />
+	<FormPin />
+
+	<div class="container">
+		<h3>¡Bienvenido a nuestro sitio de juegos!</h3>
+		<div class="description">
+			<li>Disfrutá de una gran variedad de juegos en linea</li>
+			<li>Conéctate con tus amigos para tener divertidas aventuras</li>
+			<li>Descubrí mundos llenos de sorpresas y desafíos</li>
+			<li>¡Únete a la comunidad y comienza a jugar ahora!</li>
+		</div>
+	</div>
+</Layout>
+
+<style>
+	  .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        text-align: center;
+    }
+	   .description {
+        color: white;
+        margin-left: -1rem;
+    
+    }
+      h3 {
+        border-radius: 5px;
+        background-color: rgba(255, 166, 0, 0.496);
+        padding: 0.5rem;
+        margin-bottom: 1rem;
+    }
+</style>

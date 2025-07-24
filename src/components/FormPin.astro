@@ -1,5 +1,5 @@
- <form class="form-container" style="display: none;">
-        <input type="tel" id="numberInput" placeholder="INGRESÁ TU NÚMERO" name="numberInput" required />
+ <form class="form-container formPin" style="display: none;">
+        <input type="tel" id="numberInput" maxlength="4" minlength="4" placeholder="INGRESÁ TU PIN" name="numberInput" required />
         <button type="submit">ENVIAR</button>
 </form>
 
@@ -8,6 +8,7 @@
   
     .form-container {
         display: flex;
+
         flex-direction: column;
         width: 100%;
         align-items: center;
@@ -21,7 +22,12 @@
         border-radius: 0.3rem;
         box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.926);
         border: none;
+        text-align: center;
 }
+    input::placeholder {
+        color: #ffffff;
+        font-weight: bold;
+    }
     button {
         border-radius: 5px;
         text-align: center;

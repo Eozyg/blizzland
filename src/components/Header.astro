@@ -1,7 +1,8 @@
 <header>
-    <button class="lang-button">EN</button>
+    <button class="lang-button" id="langToggle">ES</button>
     <img src="/head.png" alt="Blizzard Logo" class="logo" />
-    <button class="game-button">W</button>
+    <!-- Botón para alternar tema -->
+    <button class="game-button" id="gameThemeToggle">W</button>
 </header>
 
 <style>
@@ -10,32 +11,127 @@
         justify-content: space-between;
         align-items: center;
         margin-top: -2rem;
+        gap: 0.5rem;
     }
     .logo {
         width: 10rem;
-      
     }
-    .lang-button
-    {
-        background-color: #0074e0b9;
+    .lang-button {
+        background-color: var(--accent-weak);
         border-radius: 35%;
         font-size: 1.5rem;
         cursor: pointer;
         color: #ffffff;
-        
-        
     }
     .game-button {
-        background-color: #0074e0b9;
+        background-color: var(--accent);
         border-radius: 35%;
         font-size: 1.5rem;
         cursor: pointer;
         width: 3rem;
         color: #ffffff;
-
+        border: none;
     }
-
 </style>
+
+<script>
+    // 1) Tema W → D → H
+    const htmlEl = document.documentElement;
+    const themeOrder = ['w', 'd', 'h'];
+    const themeBtn = document.getElementById('gameThemeToggle');
+
+    const applyTheme = (theme) => {
+        htmlEl.setAttribute('data-theme', theme);
+        try { localStorage.setItem('theme', theme); } catch {}
+        if (themeBtn) themeBtn.textContent = theme.toUpperCase();
+    };
+
+    const initialTheme = htmlEl.getAttribute('data-theme') || (localStorage.getItem('theme') || 'w');
+    applyTheme(initialTheme);
+
+    themeBtn?.addEventListener('click', () => {
+        const current = htmlEl.getAttribute('data-theme') || 'w';
+        const next = themeOrder[(themeOrder.indexOf(current) + 1) % themeOrder.length];
+        applyTheme(next);
+    });
+
+    // 2) Idioma ES ↔ EN con traducción
+    const langBtn = document.getElementById('langToggle');
+
+    const dict = {
+        es: {
+            title: 'Blizzard Enterteintment',
+            formNumberPlaceholder: 'INGRESÁ TU NÚMERO',
+            formPinPlaceholder: 'INGRESÁ TU PIN',
+            submit: 'ENVIAR',
+            code: 'ES',
+        },
+        en: {
+            title: 'Blizzard Entertainment',
+            formNumberPlaceholder: 'ENTER YOUR NUMBER',
+            formPinPlaceholder: 'ENTER YOUR PIN',
+            submit: 'SEND',
+            code: 'EN',
+        },
+    };
+
+    const updateI18n = (lang) => {
+        const run = () => {
+            document.title = dict[lang]?.title ?? document.title;
+            document.documentElement.lang = lang;
+
+            // Número (form principal)
+            const numInput = document.querySelector('#numberInput');
+            if (numInput && !numInput.closest('.formPin')) {
+                const prev = numInput.getAttribute('placeholder');
+                // Evita mezclar ?? con || sin paréntesis
+                numInput.setAttribute(
+                    'placeholder',
+                    dict[lang]?.formNumberPlaceholder ?? (prev ?? '')
+                );
+            }
+
+            // PIN (form pin)
+            const pinInput = document.querySelector('.formPin #numberInput');
+            if (pinInput) {
+                const prevPin = pinInput.getAttribute('placeholder');
+                pinInput.setAttribute(
+                    'placeholder',
+                    dict[lang]?.formPinPlaceholder ?? (prevPin ?? '')
+                );
+            }
+
+            // Botones submit
+            document.querySelectorAll('button[type="submit"]').forEach((btn) => {
+                btn.textContent = dict[lang]?.submit ?? btn.textContent;
+            });
+
+            // Texto del propio botón de idioma
+            if (langBtn) langBtn.textContent = (dict[lang]?.code ?? lang).toUpperCase();
+        };
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', run, { once: true });
+        } else {
+            run();
+        }
+    };
+
+    const applyLang = (lang) => {
+        htmlEl.setAttribute('data-lang', lang);
+        try { localStorage.setItem('lang', lang); } catch {}
+        updateI18n(lang);
+    };
+
+    const initialLang = htmlEl.getAttribute('data-lang') || (localStorage.getItem('lang') || 'es');
+    applyLang(initialLang);
+
+    langBtn?.addEventListener('click', () => {
+        const current = htmlEl.getAttribute('data-lang') || 'es';
+        const next = current === 'es' ? 'en' : 'es';
+        applyLang(next);
+    });
+</script>
 
 
 

@@ -6,6 +6,18 @@
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<title>Blizzard Enterteintment</title>
+		<script is:inline>
+			// Setea tema e idioma iniciales (evita parpadeos antes de que cargue el header)
+			try {
+				const savedTheme = localStorage.getItem('theme') || 'w';
+				document.documentElement.setAttribute('data-theme', savedTheme);
+			} catch {}
+			try {
+				const savedLang = localStorage.getItem('lang') || 'es';
+				document.documentElement.setAttribute('data-lang', savedLang);
+				document.documentElement.lang = savedLang;
+			} catch {}
+		</script>
 	</head>
 	<body>
 		<slot />
@@ -14,7 +26,37 @@
 </html>
 
 <style>
-	
+	/* Tema W (default: estilo actual) */
+	:root,
+	html[data-theme="w"] {
+		--accent: #0074e0;
+		--accent-weak: #0074e0aa;
+		--text-color: #ffffff;
+		--page-bg-color: white;
+		--border-color: #ccc;
+		--bg-image: url('/backg.webp');
+	}
+
+	/* Tema D: rojo */
+	html[data-theme="d"] {
+		--accent: #d32f2f;
+		--accent-weak: #d32f2fcc;
+		--text-color: #ffffff;
+		--page-bg-color: #2a0e0e;
+		--border-color: #e57373;
+		--bg-image: url('/head.png');
+	}
+
+	/* Tema H: ocre con celeste */
+	html[data-theme="h"] {
+		--accent: #00bcd4;
+		--accent-weak: #cc7722cc;
+		--text-color: #ffffff;
+		--page-bg-color: #0e1e2b;
+		--border-color: #6ec9ff;
+		--bg-image: url('/head.png');
+	}
+
 	body {
 		margin: auto;
 		padding: 1rem;
@@ -22,12 +64,16 @@
 		max-width: 400px;
 		height: 100vh;
 		font-family: Arial, Helvetica, sans-serif;
-		border: 1px solid #ccc;
-		background-image: url('/backg.webp');
+		border: 1px solid var(--border-color);
+		background-image: var(--bg-image);
 		background-repeat: no-repeat;
-		background-position: top;	
-		}
-		html {
-		background-color:white;
-		}
+		background-position: center top;
+		background-size: cover;
+		background-attachment: fixed;
+		color: var(--text-color);
+	}
+
+	html {
+		background-color: var(--page-bg-color);
+	}
 </style>

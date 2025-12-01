@@ -7,7 +7,6 @@
 		<meta name="generator" content={Astro.generator} />
 		<title>Blizzard Enterteintment</title>
 		<script is:inline>
-			// Setea tema e idioma iniciales (evita parpadeos antes de que cargue el header)
 			try {
 				const savedTheme = localStorage.getItem('theme') || 'w';
 				document.documentElement.setAttribute('data-theme', savedTheme);
@@ -26,54 +25,65 @@
 </html>
 
 <style>
-	/* Tema W (default: estilo actual) */
-	:root,
-	html[data-theme="w"] {
-		--accent: #0074e0;
-		--accent-weak: #0074e0aa;
-		--text-color: #ffffff;
-		--page-bg-color: white;
-		--border-color: #ccc;
-		--bg-image: url('/backg.webp');
-	}
+    :root {
+        --accent: #0074e0;
+        --accent-weak: #0074e0aa;
+        --text-color: #ffffff;
+        --page-bg-color: white;
+        --border-color: #ccc;
+        --bg-image: url('/backg.webp');
+    }
 
-	/* Tema D: rojo */
-	html[data-theme="d"] {
-		--accent: #d32f2f;
-		--accent-weak: #d32f2fcc;
-		--text-color: #ffffff;
-		--page-bg-color: #2a0e0e;
-		--border-color: #e57373;
-		--bg-image: url('/head.png');
-	}
+    html[data-theme="w"] {
+        --accent: #0074e0;
+        --accent-weak: #0074e0aa;
+        --text-color: #ffffff;
+        --page-bg-color: white;
+        --border-color: #ccc;
+        --bg-image: url('/backg.webp');
+    }
 
-	/* Tema H: ocre con celeste */
-	html[data-theme="h"] {
-		--accent: #00bcd4;
-		--accent-weak: #cc7722cc;
-		--text-color: #ffffff;
-		--page-bg-color: #0e1e2b;
-		--border-color: #6ec9ff;
-		--bg-image: url('/head.png');
-	}
+    html[data-theme="d"] {
+        --accent: #d7263d;
+        --accent-weak: rgba(215, 38, 61, 0.35);
+        --text-color: #ffffff;
+        --page-bg-color: white;
+        --border-color: #b33;
+        --bg-image: url('/backd.webp');
+    }
 
-	body {
-		margin: auto;
-		padding: 1rem;
-		width: 100%;
-		max-width: 400px;
-		height: 100vh;
-		font-family: Arial, Helvetica, sans-serif;
-		border: 1px solid var(--border-color);
-		background-image: var(--bg-image);
-		background-repeat: no-repeat;
-		background-position: center top;
-		background-size: cover;
-		background-attachment: fixed;
-		color: var(--text-color);
-	}
+    html[data-theme="h"] {
+        --accent: #c7882f;
+        --accent-weak: rgba(199, 136, 47, 0.35);
+        --text-color: #ffffff;
+        --page-bg-color: white;
+        --border-color: #6aa8d9;
+        --bg-image: url('/backh.webp');
+    }
 
-	html {
-		background-color: var(--page-bg-color);
-	}
+    html[data-theme="h"] body {
+        background-size: cover;
+        background-position: top center;
+        background-repeat: no-repeat;
+        background-origin: padding-box;
+        background-clip: padding-box;
+    }
+
+    body {
+        margin: auto;
+        padding: 1rem;
+        width: 100%;
+        max-width: 400px;
+        height: 95vh;
+        font-family: Arial, Helvetica, sans-serif;
+        border: 1px solid var(--border-color);
+        background-image: var(--bg-image);
+        background-repeat: no-repeat;
+        background-position: top;
+        background-size: cover;
+        color: var(--text-color);
+        transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease, background-position 0.5s ease, background-size 0.5s ease, background-image 0.5s ease;
+    }
+
+    html { background-color: var(--page-bg-color); }
 </style>

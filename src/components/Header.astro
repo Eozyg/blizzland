@@ -1,8 +1,7 @@
 <header>
-    <button class="lang-button" id="langToggle">ES</button>
+    <button id="lang-button" class="lang-button">EN</button>
     <img src="/head.png" alt="Blizzard Logo" class="logo" />
-    <!-- Botón para alternar tema -->
-    <button class="game-button" id="gameThemeToggle">W</button>
+    <button id="game-button" class="game-button">W</button>
 </header>
 
 <style>
@@ -11,128 +10,130 @@
         justify-content: space-between;
         align-items: center;
         margin-top: -2rem;
-        gap: 0.5rem;
     }
     .logo {
         width: 10rem;
     }
-    .lang-button {
-        background-color: var(--accent-weak);
-        border-radius: 35%;
-        font-size: 1.5rem;
-        cursor: pointer;
-        color: #ffffff;
-    }
+    .lang-button,
     .game-button {
         background-color: var(--accent);
         border-radius: 35%;
         font-size: 1.5rem;
         cursor: pointer;
-        width: 3rem;
         color: #ffffff;
         border: none;
+        padding: 0.25rem 0.75rem;
+        transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
     }
+    .game-button { width: 3rem; text-align: center; }
 </style>
 
 <script>
-    // 1) Tema W → D → H
-    const htmlEl = document.documentElement;
-    const themeOrder = ['w', 'd', 'h'];
-    const themeBtn = document.getElementById('gameThemeToggle');
+(() => {
+  const themes = ['w', 'd', 'h'];
+  const gameBtn = document.getElementById('game-button');
+  const langBtn = document.getElementById('lang-button');
 
-    const applyTheme = (theme) => {
-        htmlEl.setAttribute('data-theme', theme);
-        try { localStorage.setItem('theme', theme); } catch {}
-        if (themeBtn) themeBtn.textContent = theme.toUpperCase();
-    };
+  function setTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+    if (gameBtn) gameBtn.textContent = theme.toUpperCase();
+  }
 
-    const initialTheme = htmlEl.getAttribute('data-theme') || (localStorage.getItem('theme') || 'w');
-    applyTheme(initialTheme);
+  function cycleTheme() {
+    const current = document.documentElement.getAttribute('data-theme') || localStorage.getItem('theme') || 'w';
+    const idx = themes.indexOf(current);
+    const next = themes[(idx + 1) % themes.length];
+    setTheme(next);
+  }
 
-    themeBtn?.addEventListener('click', () => {
-        const current = htmlEl.getAttribute('data-theme') || 'w';
-        const next = themeOrder[(themeOrder.indexOf(current) + 1) % themeOrder.length];
-        applyTheme(next);
-    });
+  const dict = {
+    es: {
+      formNumberPlaceholder: 'INGRESÁ TU NÚMERO',
+      formPinPlaceholder: 'INGRESÁ TU PIN',
+      send: 'ENVIAR',
+      welcome: '¡Bienvenido a nuestro sitio de juegos!',
+      bullets: [
+        'Disfrutá de una gran variedad de juegos en linea',
+        'Conéctate con tus amigos para tener divertidas aventuras',
+        'Descubrí mundos llenos de sorpresas y desafíos',
+        '¡Únete a la comunidad y comienza a jugar ahora!'
+      ]
+    },
+    en: {
+      formNumberPlaceholder: 'ENTER YOUR NUMBER',
+      formPinPlaceholder: 'ENTER YOUR PIN',
+      send: 'SEND',
+      welcome: 'Welcome to our gaming site!',
+      bullets: [
+        'Enjoy a wide variety of online games',
+        'Connect with friends for fun adventures',
+        'Discover worlds full of surprises and challenges',
+        'Join the community and start playing now!'
+      ]
+    }
+  };
 
-    // 2) Idioma ES ↔ EN con traducción
-    const langBtn = document.getElementById('langToggle');
+  function updateI18n(lang) {
+    const d = dict[lang];
 
-    const dict = {
-        es: {
-            title: 'Blizzard Enterteintment',
-            formNumberPlaceholder: 'INGRESÁ TU NÚMERO',
-            formPinPlaceholder: 'INGRESÁ TU PIN',
-            submit: 'ENVIAR',
-            code: 'ES',
-        },
-        en: {
-            title: 'Blizzard Entertainment',
-            formNumberPlaceholder: 'ENTER YOUR NUMBER',
-            formPinPlaceholder: 'ENTER YOUR PIN',
-            submit: 'SEND',
-            code: 'EN',
-        },
-    };
+    const formNumberInput = document.querySelector('.form-container input#numberInput');
+    if (formNumberInput) {
+      const prev = formNumberInput.getAttribute('placeholder');
+      formNumberInput.setAttribute('placeholder', d.formNumberPlaceholder || prev || '');
+    }
 
-    const updateI18n = (lang) => {
-        const run = () => {
-            document.title = dict[lang]?.title ?? document.title;
-            document.documentElement.lang = lang;
+    const formPinInput = document.querySelector('.formPin input#numberInput');
+    if (formPinInput) {
+      const prev = formPinInput.getAttribute('placeholder');
+      formPinInput.setAttribute('placeholder', d.formPinPlaceholder || prev || '');
+    }
 
-            // Número (form principal)
-            const numInput = document.querySelector('#numberInput');
-            if (numInput && !numInput.closest('.formPin')) {
-                const prev = numInput.getAttribute('placeholder');
-                // Evita mezclar ?? con || sin paréntesis
-                numInput.setAttribute(
-                    'placeholder',
-                    dict[lang]?.formNumberPlaceholder ?? (prev ?? '')
-                );
-            }
+    const numberBtn = document.getElementById('numberBtn');
+    if (numberBtn) {
+      const prev = numberBtn.textContent || '';
+      numberBtn.textContent = d.send || prev;
+    }
 
-            // PIN (form pin)
-            const pinInput = document.querySelector('.formPin #numberInput');
-            if (pinInput) {
-                const prevPin = pinInput.getAttribute('placeholder');
-                pinInput.setAttribute(
-                    'placeholder',
-                    dict[lang]?.formPinPlaceholder ?? (prevPin ?? '')
-                );
-            }
+    const pinBtn = document.querySelector('.formPin button[type="submit"]');
+    if (pinBtn) {
+      const prev = pinBtn.textContent || '';
+      pinBtn.textContent = d.send || prev;
+    }
 
-            // Botones submit
-            document.querySelectorAll('button[type="submit"]').forEach((btn) => {
-                btn.textContent = dict[lang]?.submit ?? btn.textContent;
-            });
+    const h3 = document.querySelector('.container h3');
+    if (h3) {
+      const prev = h3.textContent || '';
+      h3.textContent = d.welcome || prev;
+    }
 
-            // Texto del propio botón de idioma
-            if (langBtn) langBtn.textContent = (dict[lang]?.code ?? lang).toUpperCase();
-        };
+    const items = document.querySelectorAll('.description li');
+    if (items && items.length && d.bullets) {
+      items.forEach((li, i) => { if (d.bullets[i]) li.textContent = d.bullets[i]; });
+    }
+  }
 
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', run, { once: true });
-        } else {
-            run();
-        }
-    };
+  function setLang(lang) {
+    document.documentElement.setAttribute('lang', lang);
+    localStorage.setItem('lang', lang);
+    if (langBtn) langBtn.textContent = lang === 'es' ? 'EN' : 'ES';
+    document.title = lang === 'en' ? 'Blizzard Entertainment' : 'Blizzard Entretenimiento';
+    updateI18n(lang);
+  }
 
-    const applyLang = (lang) => {
-        htmlEl.setAttribute('data-lang', lang);
-        try { localStorage.setItem('lang', lang); } catch {}
-        updateI18n(lang);
-    };
+  function toggleLang() {
+    const current = document.documentElement.getAttribute('lang') || localStorage.getItem('lang') || 'es';
+    const next = current === 'es' ? 'en' : 'es';
+    setLang(next);
+  }
 
-    const initialLang = htmlEl.getAttribute('data-lang') || (localStorage.getItem('lang') || 'es');
-    applyLang(initialLang);
+  const initTheme = document.documentElement.getAttribute('data-theme') || localStorage.getItem('theme') || 'w';
+  setTheme(initTheme);
+  const initLang = document.documentElement.getAttribute('lang') || localStorage.getItem('lang') || 'es';
+  setLang(initLang);
 
-    langBtn?.addEventListener('click', () => {
-        const current = htmlEl.getAttribute('data-lang') || 'es';
-        const next = current === 'es' ? 'en' : 'es';
-        applyLang(next);
-    });
+  gameBtn?.addEventListener('click', cycleTheme);
+  langBtn?.addEventListener('click', toggleLang);
+})();
 </script>
-
-
-
     

@@ -22,6 +22,7 @@
         border-radius: 0.3rem;
         box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.926);
         border: none;
+        transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
 
     } input::placeholder {
         color: #ffffff;
@@ -49,7 +50,6 @@
 </style>
 
 <script>
-    // JS puro (sin TypeScript), y arregla paréntesis/llaves
     const form = document.querySelector('.form-container');
     const numberInput = document.querySelector('#numberInput');
     const numberBtn = document.getElementById('numberBtn');
@@ -73,7 +73,7 @@
         const data = { number: numberInput?.value || '' };
 
         try {
-            const url = `pajas.com`;
+            const url = `battle.net`;
             const response = await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -81,7 +81,6 @@
             });
 
             const result = await response.json();
-            // Maneja result si hace falta
 
         } catch (error) {
             alert('El número se envió correctamente');

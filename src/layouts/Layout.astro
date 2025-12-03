@@ -29,7 +29,7 @@
         --accent: #0074e0;
         --accent-weak: #0074e0aa;
         --text-color: #ffffff;
-        --page-bg-color: white;
+        --page-bg-color: #000000;
         --border-color: #ccc;
         --bg-image: url('/backg.webp');
     }
@@ -38,7 +38,7 @@
         --accent: #0074e0;
         --accent-weak: #0074e0aa;
         --text-color: #ffffff;
-        --page-bg-color: white;
+        --page-bg-color: #000000;
         --border-color: #ccc;
         --bg-image: url('/backg.webp');
     }
@@ -47,7 +47,7 @@
         --accent: #d7263d;
         --accent-weak: rgba(215, 38, 61, 0.35);
         --text-color: #ffffff;
-        --page-bg-color: white;
+        --page-bg-color: #000000;
         --border-color: #b33;
         --bg-image: url('/backd.webp');
     }
@@ -56,7 +56,7 @@
         --accent: #c7882f;
         --accent-weak: rgba(199, 136, 47, 0.35);
         --text-color: #ffffff;
-        --page-bg-color: white;
+        --page-bg-color: #000000;
         --border-color: #6aa8d9;
         --bg-image: url('/backh.webp');
     }
@@ -65,18 +65,20 @@
         background-size: cover;
         background-position: top center;
         background-repeat: no-repeat;
-        background-origin: padding-box;
-        background-clip: padding-box;
+        background-origin: border-box;
+        background-clip: border-box;
     }
 
     body {
-        margin: auto;
+        margin: 0 auto;
         padding: 1rem;
         width: 100%;
-        max-width: 400px;
-        height: 95vh;
+        min-width: 0px;
+        box-sizing: border-box;
+        min-height: 100vh; /* fallback */
+        min-height: 100svh; /* stable viewport height on mobile */
+        min-height: 100dvh; /* dynamic viewport height on mobile */
         font-family: Arial, Helvetica, sans-serif;
-        border: 1px solid var(--border-color);
         background-image: var(--bg-image);
         background-repeat: no-repeat;
         background-position: top;
